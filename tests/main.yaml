@@ -1,0 +1,24 @@
+---
+# vars file for Dell-Networking.dellos-flow-monitor, below gives a example configuration
+
+# Sample variables for dellos10 device
+dellos_flow_monitor:
+  session 1:
+    session_type: local
+    description: "Discription goes here"
+    dest_interface_name: ethernet1/1/8
+    src_interface_name: ethernet1/1/5
+    flow_based: enable
+    shutdown: down
+    state: present
+  session 2:
+    session_type: local
+    description: "Discription of session goes here"
+    dest_interface_name: ethernet1/1/6
+    src_interface_name: ethernet1/1/7
+    flow_based: enable
+    shutdown: down
+    state: present
+  session 3:
+    state: absent
+
