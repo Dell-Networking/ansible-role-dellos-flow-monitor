@@ -6,19 +6,28 @@ dellos_flow_monitor:
   session 1:
     session_type: local
     description: "Discription goes here"
-    dest_interface_name: ethernet1/1/8
-    src_interface_name: ethernet1/1/5
-    flow_based: enable
-    shutdown: down
+    port_match:
+      - interface_name: ethernet 1/1/4
+        location: source
+        state: present
+      - interface_name: ethernet 1/1/3
+        location: destination
+        state: present
+    flow_based: true
+    shutdown: up
     state: present
   session 2:
     session_type: local
     description: "Discription of session goes here"
-    dest_interface_name: ethernet1/1/6
-    src_interface_name: ethernet1/1/7
-    flow_based: enable
-    shutdown: down
+    port_match:
+      - interface_name: ethernet 1/1/6
+        location: source
+        state: present
+      - interface_name: ethernet 1/1/7
+        location: destination
+        state: present
+    flow_based: false
+    shutdown: up
     state: present
   session 3:
-    state: absent
-
+    state: present

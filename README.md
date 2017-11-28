@@ -4,8 +4,7 @@ ACL flow-based monitor role
 This role facilitates configuring ACL flow-based monitoring attributes. Flow-based mirroring is a mirroring session in which traffic matches specified policies that are mirrored to a destination port. Port-based mirroring maintains a database that contains all monitoring sessions (including port monitor sessions).
 This role is abstracted for dellos10.
 
-The ACL flow-based role requires an SSH connection for connectivity to a Dell EMC Networking device. You can use any of the built-in Dell EMC Networking OS connection variables, or the ``provider``
-dictionary.
+The ACL flow-based role requires an SSH connection for connectivity to a Dell EMC Networking device. You can use any of the built-in Dell EMC Networking OS connection variables, or the *provider* dictionary.
 
 Installation
 ------------
@@ -28,8 +27,10 @@ Role variables
 |------------|---------------------------|---------------------------------------------------------|-----------------------|
 | ``session_type``  | string: local_*_,rspan-source,erspan-source      | Configures the monitoring session type            | dellos10 |
 | ``description`` | string | Configures the monitor session description | dellos10 |
-| ``dest_interface_name``     | string | Configures the destination interface | dellos10 |
-| ``src_interface_name`` | string | Configures the source interface | dellos10 |
+| ``port_match`` | list | List of interfaces with location source and destination | dellos10 |
+| ``port_match.interface_name``     | string | Configures the interface | dellos10 |
+| ``port_match.location`` | string: source, destination | Configures the source/destination of interface | dellos10 |
+| ``port_match.state``  | string: absent,present\*           | Deletes the interface if set to absent | dellos10 |
 | ``flow_based`` | boolean | Enables flow-based monitoring | dellos10 |
 | ``shutdown`` | string: up,down\* | Enable/disables the monitoring session | dellos10 |
 | ``state``  | string: absent,present\*           | Deletes the monitoring session corresponding to the session ID if set to absent | dellos10 |
@@ -79,24 +80,32 @@ It writes a simple playbook that only references the *dellos-flow-monitor* role.
       auth_pass: xxxxx
     build_dir: ../temp/dellos9
     dellos_flow_monitor:
-          session 1:
-		session_type: local
-		description: "Discription goes here"
-		dest_interface_name: ethernet1/1/8
-		src_interface_name: ethernet1/1/5
-		flow_based: enable
-		shutdown: down
-		state: present
-	  session 2:
-		session_type: local
-		description: "Discription of session goes here"
-		dest_interface_name: ethernet1/1/6
-		src_interface_name: ethernet1/1/7
-		flow_based: enable
-		shutdown: down
-		state: present
-	  session 3:
-		state: absent
+      session 1:
+        session_type: local
+        description: "Discription goes here"
+        port_match:
+          - interface_name: ethernet 1/1/4
+            location: source
+            state: present
+          - interface_name: ethernet 1/1/3
+            location: destination
+            state: present
+        flow_based: true
+        shutdown: up
+        state: present
+      session 2:
+        session_type: local
+        description: "Discription of session goes here"
+        port_match:
+          - interface_name: ethernet 1/1/6
+            location: source
+            state: present
+          - interface_name: ethernet 1/1/7
+            location: destination
+            state: present
+        flow_based: true
+        shutdown: up
+        state: present
     dellos_acl:
 	  - name: testflow
 	    type: ipv4
