@@ -2,7 +2,6 @@
 {##########################################
 Purpose:
 Configure Flow monitor commands for dellos10 Devices
-
 dellos_flow_monitor:
   session 1:
     session_type: local
@@ -32,7 +31,6 @@ dellos_flow_monitor:
     state: present
   session 3:
     state: absent 
-  
 #########################################}
 {% if dellos_flow_monitor is defined and dellos_flow_monitor %}
 {% for key in dellos_flow_monitor.keys() %}
